@@ -1,7 +1,9 @@
-# inventory_system
+# Inventory system
 Inventory system implementation with a few advanced features made with Unity.
 
-Youtube link: https://www.youtube.com/watch?v=C5cvbBBZtSo
+[Youtube link](https://www.youtube.com/watch?v=C5cvbBBZtSo)
+
+[Download latest release](https://github.com/leakvoid/inventory_system/releases/tag/1.0)
 
 Implementation includes following features:
 - drag & drop
@@ -20,4 +22,5 @@ Architecture:
 Implementation is located in folder Assets/Game/Scripts.
 Inventory is controlled via inventoryManager. Crafting via craftingManager. Data and UI information about items is stored inside InventoryItem.
 Items are created via ItemFactory and stored inside VirtualInventoryContainer as well as inside ItemSlots for UI representation.
+
 Implemented using OOP with some composition, design patterns used: factory, singleton, observer.
