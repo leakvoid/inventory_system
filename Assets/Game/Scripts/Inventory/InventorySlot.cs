@@ -58,5 +58,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler
                 itemInSlotTransform.SetParent(itemInSlot.parentAfterDrag);
             }
         }
+
+        CraftingManager.Instance.UpdateCraftingOutcomeView();
     }
 }

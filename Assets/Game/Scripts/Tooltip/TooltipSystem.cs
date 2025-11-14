@@ -4,23 +4,23 @@ using UnityEngine.UI;
 
 public class TooltipSystem : MonoBehaviour
 {
-    private static TooltipSystem Instance;
+    [SerializeField] private Tooltip tooltip;
 
-    public Tooltip tooltip;
-
+    public static TooltipSystem Instance;
     public void Awake()
     {
         Instance = this;
     }
 
-    public static void Show(string content, string header = "")
+    public void Show(string header, string description)
     {
-        Instance.tooltip.SetText(content, header);
-        Instance.tooltip.gameObject.SetActive(true);
+        tooltip.SetText(description, header);
+        tooltip.UpdatePosition();
+        tooltip.gameObject.SetActive(true);
     }
 
-    public static void Hide()
+    public void Hide()
     {
-        Instance.tooltip.gameObject.SetActive(false);
+        tooltip.gameObject.SetActive(false);
     }
 }

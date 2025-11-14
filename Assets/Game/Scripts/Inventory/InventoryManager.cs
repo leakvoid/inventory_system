@@ -16,6 +16,11 @@ public class InventoryManager : MonoBehaviour
         Instance = this;
     }
 
+    void Start()
+    {
+        PopulateEmptySlots();
+    }
+
     public void ShowAllView()
     {
         ResetView();

@@ -4,16 +4,11 @@ using UnityEngine.UI;
 
 public class Tooltip : MonoBehaviour
 {
-    public TextMeshProUGUI headerField;
-    public TextMeshProUGUI contentField;
-    public LayoutElement layoutElement;
-    public RectTransform rectTransform;
+    [SerializeField] private TextMeshProUGUI headerField;
+    [SerializeField] private TextMeshProUGUI contentField;
+    [SerializeField] private LayoutElement layoutElement;
     [SerializeField] int characterWrapLimit;
-
-    void Awake()
-    {
-        rectTransform = GetComponent<RectTransform>();
-    }
+    [SerializeField] private RectTransform rectTransform;
 
     public void SetText(string content, string header = "")
     {
@@ -33,7 +28,6 @@ public class Tooltip : MonoBehaviour
         int contentLength = contentField.text.Length;
         if (headerLength > characterWrapLimit || contentLength > characterWrapLimit)
         {
-            //Globals.Log("Tooltip over maximum. Resize");
             layoutElement.enabled = true;
         }
         else
@@ -42,14 +36,22 @@ public class Tooltip : MonoBehaviour
         }
     }
 
+    public void UpdatePosition()
+    {
+        Vector2 mousePos = Input.mousePosition;
+
+        // float pivotX = position.x / Screen.width;
+        // float pivotY = position.y / Screen.height;
+        // rectTransform.pivot = new Vector2(pivotX, pivotY);
+        float pivotX = mousePos.x > Screen.width * 0.8f ? 1 : 0;
+        float pivotY = mousePos.y > Screen.height * 0.8f ? 1 : 0;
+        rectTransform.pivot = new Vector2(pivotX, pivotY);
+        
+        transform.position = mousePos;
+    }
+
     void Update()
     {
-        Vector2 position = Input.mousePosition;
-
-        float pivotX = position.x / Screen.width;
-        float pivotY = position.y / Screen.height;
-
-        rectTransform.pivot = new Vector2(pivotX, pivotY);
-        transform.position = position;
+        UpdatePosition();
     }
 }

@@ -5,11 +5,10 @@ using UnityEngine.EventSystems;
 
 public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] float TooltipDelay = 0.4f;
-    WaitForSeconds tooltipDelayWFS;
+    [SerializeField] float TooltipDelay = 0.5f;
+    [SerializeField] InventoryItem inventoryItem;
 
-    public string Content;
-    public string Header;
+    private WaitForSeconds tooltipDelayWFS;
     private Coroutine showTooltipCoroutine;
 
     void Awake()
@@ -28,12 +27,13 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         {
             StopCoroutine(showTooltipCoroutine);
         }
-        TooltipSystem.Hide();
+        TooltipSystem.Instance.Hide();
     }
 
     private IEnumerator ShowTooltipAfterDelay()
     {
         yield return tooltipDelayWFS;
-        TooltipSystem.Show(Content, Header);
+        TooltipSystem.Instance.Show(inventoryItem.itemTemplate.Tag.ToString(),
+            inventoryItem.itemTemplate.Description);
     }
 }

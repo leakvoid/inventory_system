@@ -159,6 +159,7 @@ GameObject:
   - component: {fileID: 2966158958358376335}
   - component: {fileID: 8926723443685328493}
   - component: {fileID: 8864582869962407071}
+  - component: {fileID: 600843591253640800}
   m_Layer: 0
   m_Name: InventoryItemPrefab
   m_TagString: Untagged
@@ -237,7 +238,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemTemplate: {fileID: 0}
-  count: 1
   image: {fileID: 8926723443685328493}
   countText: {fileID: 8348983310276262825}
   parentAfterDrag: {fileID: 0}
+  isHitAnySlot: 0
+--- !u!114 &600843591253640800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7608077058532152461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e92ec1e551ce2c2a9b485bde5b3af2ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TooltipDelay: 0.4
+  inventoryItem: {fileID: 8864582869962407071}
