@@ -77,8 +77,6 @@ public class CraftingManager : MonoBehaviour
             }
         }
 
-        print("stick count: " + stickCount);
-
         foreach (var recipe in recipes)
         {
             if (recipe.WoodRequired == woodCount && recipe.StickRequired == stickCount &&

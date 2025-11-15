@@ -11,23 +11,11 @@ public class InventoryButtonController : MonoBehaviour
     [SerializeField] Button materialsOnlyButton;
     [SerializeField] TMP_InputField inputField;
 
-    enum CurrentMode
-    {
-        ShowAll,
-        ToolsOnly,
-        MaterialsOnly,
-        Filter
-    }
-
-    CurrentMode currentMode;
-
     void Awake()
     {
         showAllButton.interactable = false;
 
         inputField.onValueChanged.AddListener(OnInputValueChanged);
-
-        currentMode = CurrentMode.ShowAll;
     }
 
     public void PopulateSlots()
@@ -46,34 +34,7 @@ public class InventoryButtonController : MonoBehaviour
 
     public void SortItems()
     {
-        VirtualInventoryContainer.Instance.virtualInventory.Sort((a, b) => {
-            int tagComparison = string.Compare(
-                a.itemTemplate.Tag.ToString(), 
-                b.itemTemplate.Tag.ToString(), 
-                true);
-
-            if (tagComparison != 0)
-                return tagComparison;
-
-            return b.ItemCount.CompareTo(a.ItemCount);
-        });
-
-        switch (currentMode)
-        {
-            case CurrentMode.ToolsOnly:
-                ToolsOnly();
-                break;
-            case CurrentMode.MaterialsOnly:
-                MaterialsOnly();
-                break;
-            case CurrentMode.Filter:
-                OnInputValueChanged(inputField.text);
-                break;
-            case CurrentMode.ShowAll:
-            default:
-                ShowAll();
-                break;
-        }
+        InventoryManager.Instance.SortItems();
     }
 
     public void ShowAll()
@@ -82,9 +43,8 @@ public class InventoryButtonController : MonoBehaviour
         showAllButton.interactable = false;
         toolsOnlyButton.interactable = true;
         materialsOnlyButton.interactable = true;
-        currentMode = CurrentMode.ShowAll;
 
-        InventoryManager.Instance.ShowAllView();
+        InventoryManager.Instance.ShowAll();
     }
 
     public void ToolsOnly()
@@ -93,9 +53,8 @@ public class InventoryButtonController : MonoBehaviour
         showAllButton.interactable = true;
         toolsOnlyButton.interactable = false;
         materialsOnlyButton.interactable = true;
-        currentMode = CurrentMode.ToolsOnly;
 
-        InventoryManager.Instance.ToolsOnlyView();
+        InventoryManager.Instance.ToolsOnlyFilter();
     }
 
     public void MaterialsOnly()
@@ -104,9 +63,8 @@ public class InventoryButtonController : MonoBehaviour
         showAllButton.interactable = true;
         toolsOnlyButton.interactable = true;
         materialsOnlyButton.interactable = false;
-        currentMode = CurrentMode.MaterialsOnly;
 
-        InventoryManager.Instance.MaterialsOnlyView();
+        InventoryManager.Instance.MaterialsOnlyFilter();
     }
     
     public void OnInputValueChanged(string filter)
@@ -114,8 +72,7 @@ public class InventoryButtonController : MonoBehaviour
         showAllButton.interactable = true;
         toolsOnlyButton.interactable = true;
         materialsOnlyButton.interactable = true;
-        currentMode = CurrentMode.Filter;
 
-        InventoryManager.Instance.PromptFilterView(filter);
+        InventoryManager.Instance.PromptFilter(filter);
     }
 }

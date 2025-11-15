@@ -19,11 +19,61 @@ public class InventoryManager : MonoBehaviour
     void Start()
     {
         PopulateEmptySlots();
+        currentMode = CurrentMode.ShowAll;
     }
 
-    public void ShowAllView()
+    enum CurrentMode
+    {
+        ShowAll,
+        ToolsOnly,
+        MaterialsOnly,
+        Filter
+    }
+    CurrentMode currentMode;
+
+    // Sorting
+    public void SortItems()
+    {
+        VirtualInventoryContainer.Instance.virtualInventory.Sort((a, b) => {
+            int tagComparison = string.Compare(
+                a.itemTemplate.Tag.ToString(),
+                b.itemTemplate.Tag.ToString(),
+                true);
+
+            if (tagComparison != 0)
+                return tagComparison;
+
+            return b.ItemCount.CompareTo(a.ItemCount);
+        });
+
+        UpdateView();
+    }
+
+    // Filtering
+    public void UpdateView()
+    {
+        switch (currentMode)
+        {
+            case CurrentMode.ToolsOnly:
+                ToolsOnlyFilter();
+                break;
+            case CurrentMode.MaterialsOnly:
+                MaterialsOnlyFilter();
+                break;
+            case CurrentMode.Filter:
+                PromptFilter(lastPrompt);
+                break;
+            case CurrentMode.ShowAll:
+            default:
+                ShowAll();
+                break;
+        }
+    }
+
+    public void ShowAll()
     {
         ResetView();
+        currentMode = CurrentMode.ShowAll;
 
         var inventoryItems = VirtualInventoryContainer.Instance.virtualInventory;
         for(int i = 0; i < inventoryItems.Count; i++)
@@ -33,9 +83,10 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void ToolsOnlyView()
+    public void ToolsOnlyFilter()
     {
         ResetView();
+        currentMode = CurrentMode.ToolsOnly;
 
         var inventoryItems = VirtualInventoryContainer.Instance.virtualInventory;
         int i = 0;
@@ -50,9 +101,10 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void MaterialsOnlyView()
+    public void MaterialsOnlyFilter()
     {
         ResetView();
+        currentMode = CurrentMode.MaterialsOnly;
 
         var inventoryItems = VirtualInventoryContainer.Instance.virtualInventory;
         int i = 0;
@@ -67,17 +119,19 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void PromptFilterView(string filter)
+    string lastPrompt;
+    public void PromptFilter(string filter)
     {
         ResetView();
+        currentMode = CurrentMode.Filter;
 
         var inventoryItems = VirtualInventoryContainer.Instance.virtualInventory;
         int i = 0;
         
-        string searchFilter = filter.ToLower();
+        lastPrompt = filter.ToLower();
         foreach(var item in inventoryItems)
         {
-            if (item.itemTemplate.Tag.ToString().ToLower().Contains(searchFilter))
+            if (item.itemTemplate.Tag.ToString().ToLower().Contains(lastPrompt))
             {
                 item.transform.SetParent(inventorySlots[i].transform);
                 item.gameObject.SetActive(true);
@@ -96,6 +150,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    // Item creation
     public void PopulateEmptySlots()
     {
         for (int i = 0; i < inventorySlots.Length; i++)
@@ -106,6 +161,8 @@ public class InventoryManager : MonoBehaviour
                 SpawnRandomItem(slot);
             }
         }
+
+        UpdateView();
     }
 
     private void SpawnRandomItem(InventorySlot slot)

@@ -15,7 +15,8 @@ public class InventorySlot : MonoBehaviour, IDropHandler
 
         if (transform.childCount == 0)
         {
-            print("Drop item");
+            if (!InventoryManager.Instance.HasEmptySlots())
+                return;
             // Empty slot
             if (draggedItem.parentAfterDrag.GetComponent<CraftingSlot>() != null)
             {
@@ -23,6 +24,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             }
 
             draggedItem.parentAfterDrag = transform;
+            InventoryManager.Instance.UpdateView();
         }
         else
         {
@@ -32,7 +34,6 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             if (draggedItem.itemTemplate.Tag == itemInSlot.itemTemplate.Tag &&
                 draggedItem.itemTemplate.Type == ItemType.Material)
             {
-                print("Stack items");
                 // Stack same materials
                 if (draggedItem.ItemCount + itemInSlot.ItemCount <= MAX_ITEM_STACK)
                 {
@@ -50,7 +51,6 @@ public class InventorySlot : MonoBehaviour, IDropHandler
                 if (draggedItem.parentAfterDrag.GetComponent<CraftingSlot>() != null)
                     return;
 
-                print("Swap items");
                 // Swap parents
                 itemInSlot.parentAfterDrag = draggedItem.parentAfterDrag;
                 draggedItem.parentAfterDrag = transform;
